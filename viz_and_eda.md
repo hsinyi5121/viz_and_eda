@@ -164,6 +164,16 @@ weather_df |>
 
 ![](viz_and_eda_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
 
+``` r
+weather_df |> 
+  filter(name == "Molokai_HI") |> 
+  ggplot(aes(x= date, y = tmax)) +
+  geom_line(alpha = .5) +
+  geom_point(size = .5)
+```
+
+![](viz_and_eda_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
+
 ## univariate plotting
 
 histogram
@@ -175,7 +185,7 @@ ggplot(weather_df, aes(x = tmax, fill = name)) +
 
     ## Warning: Removed 17 rows containing non-finite values (`stat_bin()`).
 
-![](viz_and_eda_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
+![](viz_and_eda_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
 
 let’s use a density plot
 
@@ -186,7 +196,7 @@ ggplot(weather_df, aes(x = tmax, fill = name)) +
 
     ## Warning: Removed 17 rows containing non-finite values (`stat_density()`).
 
-![](viz_and_eda_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
+![](viz_and_eda_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
 
 using boxplots!!
 
@@ -196,4 +206,50 @@ ggplot(weather_df, aes(x = name, y = tmax)) + geom_boxplot()
 
     ## Warning: Removed 17 rows containing non-finite values (`stat_boxplot()`).
 
-![](viz_and_eda_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
+![](viz_and_eda_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
+
+violin plots?
+
+``` r
+ggplot(weather_df, aes(y = tmax, x = name)) + 
+  geom_violin()
+```
+
+    ## Warning: Removed 17 rows containing non-finite values (`stat_ydensity()`).
+
+![](viz_and_eda_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
+
+ridge plot
+
+``` r
+ggplot(weather_df, aes(x = tmax, y = name)) + 
+  geom_density_ridges(scale = .85)
+```
+
+    ## Picking joint bandwidth of 1.54
+
+    ## Warning: Removed 17 rows containing non-finite values
+    ## (`stat_density_ridges()`).
+
+![](viz_and_eda_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
+
+## saving and embedding plots
+
+``` r
+ggp_weather = 
+  weather_df |> 
+  ggplot(aes(x = tmin, y = tmax)) + 
+  geom_point() 
+
+ggsave("ggp_weather.pdf", ggp_weather, width = 8, height = 5)
+```
+
+    ## Warning: Removed 17 rows containing missing values (`geom_point()`).
+
+``` r
+ggp_weather
+```
+
+    ## Warning: Removed 17 rows containing missing values (`geom_point()`).
+
+![](viz_and_eda_files/figure-gfm/unnamed-chunk-17-1.png)<!-- -->
