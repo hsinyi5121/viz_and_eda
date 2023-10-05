@@ -131,3 +131,49 @@ weather_df |>
   knitr::kable(digits = 2)
 ```
 
+## Grouped mutate 
+
+```{r}
+weather_df |>
+  group_by(name) |>
+  mutate(
+    mean_tmax = mean(tmax, na.rm = TRUE),
+    centered_tmax = tmax - mean_tmax) |> 
+  ggplot(aes(x = date, y = centered_tmax, color = name)) + 
+    geom_point() 
+```
+
+```{r}
+weather_df |>
+  group_by(name, month) |>
+  mutate(temp_ranking = min_rank(tmax))
+```
+
+can also filter
+```{r}
+weather_df |>
+  group_by(name, month) |>
+  mutate(tmax_rank = min_rank(desc(tmax))) |> 
+  filter(tmax_rank < 2 )
+```
+
+lags
+used to compare an observation to it’s previous value. This is useful, for example, to find the day-by-day change in max temperature within each station over the year
+
+```{r}
+weather_df |> 
+  group_by(name) |> 
+  mutate(yesterday_tmax = lag(tmax, 3))
+```
+
+This kind of variable might be used to quantify the day-by-day variability in max temperature, or to identify the largest one-day increase
+
+```{r}
+weather_df |> 
+  group_by(name) |> 
+  mutate(temp_change = tmax - lag(tmax)) |> 
+  summarize(
+    sd_temp_change = sd(temp_change, na.rm = TRUE)
+  )
+```
+
